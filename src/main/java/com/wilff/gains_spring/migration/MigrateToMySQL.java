@@ -33,12 +33,12 @@ public class MigrateToMySQL {
         // -------------------------------
         // 1️⃣ Import users.json
         // -------------------------------
-        File usersFile = new File("C:/Users/mathi/backups/users.json");
+        File usersFile = new File("/home/apps/backups-json/users.json");
         for (JsonNode node : mapper.readTree(usersFile)) {
             String mongoId = node.get("_id").get("$oid").asText();
             String nameStr = node.get("name").asText();
             String email = node.get("email").asText();
-            String passwordHash = node.get("password").asText();
+            String passwordHash = node.get("password").asText(  );
 
             String sql = "INSERT INTO user (name, email, password, user_role) VALUES (?, ?, ?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -57,7 +57,7 @@ public class MigrateToMySQL {
         // -------------------------------
         // 2️⃣ Import exercises.json
         // -------------------------------
-        File exercisesFile = new File("C:/Users/mathi/backups/exercises.json");
+        File exercisesFile = new File("/home/apps/backups-json/exercises.json");
         for (JsonNode node : mapper.readTree(exercisesFile)) {
             String mongoId = node.get("_id").get("$oid").asText();
             String nameStr = node.get("name").asText();
@@ -80,7 +80,7 @@ public class MigrateToMySQL {
         // -------------------------------
         // 3️⃣ Import workouts.json
         // -------------------------------
-        File workoutsFile = new File("C:/Users/mathi/backups/workouts.json");
+        File workoutsFile = new File("/home/apps/backups-json/workouts.json");
         for (JsonNode node : mapper.readTree(workoutsFile)) {
             String mongoId = node.get("_id").get("$oid").asText();
             String nameStr = node.get("name").asText();
@@ -109,7 +109,7 @@ public class MigrateToMySQL {
         // -------------------------------
         // 4️⃣ Import workout_exercises.json
         // -------------------------------
-        File workoutExercisesFile = new File("C:/Users/mathi/backups/workoutexercises.json");
+        File workoutExercisesFile = new File("/home/apps/backups-json/workoutexercises.json");
         for (JsonNode node : mapper.readTree(workoutExercisesFile)) {
             String mongoId = node.get("_id").get("$oid").asText();
             String mongoWorkoutId = node.get("workoutId").get("$oid").asText();
@@ -133,7 +133,7 @@ public class MigrateToMySQL {
         // -------------------------------
         // 5️⃣ Import lifting_sets.json
         // -------------------------------
-        File liftingSetsFile = new File("C:/Users/mathi/backups/sets.json");
+        File liftingSetsFile = new File("/home/apps/backups-json/sets.json");
         for (JsonNode node : mapper.readTree(liftingSetsFile)) {
             int reps = node.get("reps").asInt();
             int setOrder = node.get("order").asInt();
