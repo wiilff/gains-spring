@@ -15,9 +15,9 @@ public class MigrateToMySQL {
 
 
     public static void importAllJsonToMySQL() throws Exception {
-        String url = "jdbc:mysql://localhost:3306/db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+        String url = "jdbc:mysql://localhost:3306/db";
         String user = "user";
-        String password = "root";
+        String password = "password";
 
         Connection conn = DriverManager.getConnection(url, user, password);
         ObjectMapper mapper = new ObjectMapper();
