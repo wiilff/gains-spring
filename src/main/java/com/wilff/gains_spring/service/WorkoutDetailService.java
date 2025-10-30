@@ -66,9 +66,10 @@ public class WorkoutDetailService {
                                                 .order(s.getSetOrder())
                                                 .loggedAt(s.getLoggedAt())
                                                 .build())
+                                        .sorted(Comparator.comparing(SetResponse::getOrder))
                                         .toList())
                         .build())
-                .sorted(Comparator.comparing(ExerciseStats::getDate).reversed())
+                .sorted(Comparator.comparing(ExerciseStats::getDate))
                 .toList();
     }
 
