@@ -1,7 +1,10 @@
 package com.wilff.gains_spring.controller;
 
+import java.time.Instant;
 import java.util.List;
 
+import com.wilff.gains_spring.dto.auth.AuthResponse;
+import com.wilff.gains_spring.dto.request.RegisterUserRequest;
 import com.wilff.gains_spring.dto.response.UserStats;
 import com.wilff.gains_spring.service.ProfileService;
 import com.wilff.gains_spring.service.interfaces.IUserService;
@@ -9,16 +12,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.wilff.gains_spring.dto.response.UserResponse;
 import com.wilff.gains_spring.service.impl.UserServiceImpl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/user")
@@ -44,5 +46,6 @@ public class UserController {
         var user = userService.findByEmail(userDetails.getUsername()).orElseThrow();
         return new ResponseEntity<>(profileService.getProfileStats(user.getId()), HttpStatus.OK);
     }
+
 
 }

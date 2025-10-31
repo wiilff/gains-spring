@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface IUserService {
 
-    void save(User user);
+    org.springframework.security.core.userdetails.User save(User user);
     User getById(int id);
     Optional<User> findByEmail(String email);
     List<User> getAll();

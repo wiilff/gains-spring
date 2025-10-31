@@ -51,6 +51,10 @@ public class User implements UserDetails{
 
     private boolean isPublic;
 
+    private boolean isDeleted;
+
+    private Instant deletedAt;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Builder.Default
     @JsonManagedReference

@@ -30,8 +30,9 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void save(User user) {
+    public org.springframework.security.core.userdetails.User save(User user) {
         userRepository.save(user);
+        return null;
     }
 
     @Override
