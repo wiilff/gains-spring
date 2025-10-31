@@ -1,5 +1,6 @@
 package com.wilff.gains_spring.controller;
 
+import com.wilff.gains_spring.service.interfaces.IUserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -26,6 +27,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import java.time.Instant;
+
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -34,7 +37,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-    private final UserServiceImpl userService;
+    private final IUserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterUserRequest request, HttpServletResponse response) {
@@ -45,7 +48,7 @@ public class AuthController {
                 .userRole(UserRole.USER)
                 .build();
 
-        userService.create(user);
+        userService.save(user);
 
         String jwt = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
@@ -73,6 +76,10 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         User user = userService.findByEmail(request.getEmail()).orElseThrow();
+
+        user.setLastLogin(Instant.now());
+        userService.save(user);
+
         String jwt = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 

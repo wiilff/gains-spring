@@ -2,6 +2,8 @@ package com.wilff.gains_spring.controller;
 
 import java.util.List;
 
+import com.wilff.gains_spring.service.interfaces.IUserService;
+import com.wilff.gains_spring.service.interfaces.IWorkoutService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,8 +25,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WorkoutController {
 
-    private final WorkoutServiceImpl workoutService;
-    private final UserServiceImpl userService;
+    private final IWorkoutService workoutService;
+    private final IUserService userService;
 
     @GetMapping("")
     public ResponseEntity<?> getAll(@AuthenticationPrincipal UserDetails userDetails) {

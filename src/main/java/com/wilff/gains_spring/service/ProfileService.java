@@ -5,6 +5,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.wilff.gains_spring.dto.response.UserStats;
+import com.wilff.gains_spring.model.User;
+import com.wilff.gains_spring.service.impl.ExerciseService;
+import com.wilff.gains_spring.service.interfaces.ISetService;
+import com.wilff.gains_spring.service.interfaces.IWorkoutExerciseService;
+import com.wilff.gains_spring.service.interfaces.IWorkoutService;
 import org.springframework.stereotype.Service;
 
 import com.wilff.gains_spring.dto.response.ExerciseStats;
@@ -19,8 +25,19 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ProfileService {
-    
-    private final WorkoutExerciseServiceImpl workoutExerciseService; 
+
+    private final IWorkoutService workoutService;
+    private final ISetService setService;
+    private final IWorkoutExerciseService workoutExerciseService;
+
+    public UserStats getProfileStats(int userId) {
+        return UserStats.builder()
+                .consecutiveWeeks(workoutService.getConsecutiveWeeks(userId))
+                .totalSets(setService.countByUserId(userId))
+                .totalWorkouts(workoutService.getTotalWorkoutsByUserId(userId))
+                .totalExercises(workoutExerciseService.countTotalWorkoutExercises(userId))
+                .build();
+    }
 
 }
 

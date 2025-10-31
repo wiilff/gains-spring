@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wilff.gains_spring.service.interfaces.ISetService;
 import org.springframework.stereotype.Service;
 
 import com.wilff.gains_spring.dto.request.PostSetRequest;
@@ -11,16 +12,13 @@ import com.wilff.gains_spring.model.LiftingSet;
 import com.wilff.gains_spring.model.WorkoutExercise;
 import com.wilff.gains_spring.repository.SetRepository;
 import com.wilff.gains_spring.repository.WorkoutExerciseRepository;
-import com.wilff.gains_spring.repository.WorkoutRepository;
-import com.wilff.gains_spring.service.interfaces.set.SetCommandService;
-import com.wilff.gains_spring.service.interfaces.set.SetQueryService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class SetService implements SetCommandService, SetQueryService {
+public class SetService implements ISetService {
 
     private final SetRepository setRepository;
     private final WorkoutExerciseRepository workoutExerciseRepository;
@@ -64,7 +62,6 @@ public class SetService implements SetCommandService, SetQueryService {
                         .reps(req.getReps())
                         .weight(req.getWeight())
                         .setOrder(req.getOrder())
-                        .loggedAt(req.getLoggedAt())
                         .workoutExercise(workoutExercise)
                         .build();
             }
@@ -72,6 +69,11 @@ public class SetService implements SetCommandService, SetQueryService {
         }
 
         return setRepository.saveAll(resultSets);
+    }
+
+    @Override
+    public int countByUserId(int userId) {
+        return setRepository.countByUserId(userId);
     }
 
     @Override

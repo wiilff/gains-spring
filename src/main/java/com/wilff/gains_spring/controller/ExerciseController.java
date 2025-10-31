@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.wilff.gains_spring.service.interfaces.IUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,7 +36,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ExerciseController {
 
     private final ExerciseService exerciseService;
-    private final UserServiceImpl userService;
+    private final IUserService userService;
     private final WorkoutDetailService workoutDetailService;
 
     @GetMapping("")

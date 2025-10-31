@@ -17,4 +17,7 @@ public interface SetRepository extends JpaRepository<LiftingSet, Integer> {
     int countSetsByWorkoutId(@Param("workoutId") int workoutId);
 
     List<LiftingSet> findByWorkoutExerciseOrderBySetOrder(WorkoutExercise workoutExercise);
+
+    @Query("SELECT COUNT(ls) FROM LiftingSet ls WHERE ls.workoutExercise.workout.user.id = :userId")
+    int countByUserId(@Param("userId") int userId);
 }

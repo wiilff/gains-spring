@@ -2,6 +2,7 @@ package com.wilff.gains_spring.controller;
 
 import java.util.List;
 
+import com.wilff.gains_spring.service.interfaces.ISetService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/workouts/exercises/sets")
 public class SetController {
 
-    private final SetService setService;
+    private final ISetService setService;
  
     @PutMapping("/{workoutExerciseId}")
     public ResponseEntity<List<LiftingSet>> addSets(@PathVariable int workoutExerciseId, @RequestBody List<PostSetRequest> setList) {

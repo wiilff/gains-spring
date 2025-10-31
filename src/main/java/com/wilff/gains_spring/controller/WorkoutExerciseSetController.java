@@ -2,6 +2,8 @@ package com.wilff.gains_spring.controller;
 
 import java.util.List;
 
+import com.wilff.gains_spring.service.interfaces.IUserService;
+import com.wilff.gains_spring.service.interfaces.IWorkoutExerciseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +34,8 @@ import lombok.RequiredArgsConstructor;
 public class WorkoutExerciseSetController {
 
     private final WorkoutDetailService workoutDetailService; 
-    private final UserServiceImpl userService;
-    private final WorkoutExerciseServiceImpl workoutExerciseService;
+    private final IUserService userService;
+    private final IWorkoutExerciseService workoutExerciseService;
 
     @GetMapping("/sets/{workoutId}")
     public ResponseEntity<WorkoutExerciseSetResponse> getWorkoutDetails(@PathVariable int workoutId) {
