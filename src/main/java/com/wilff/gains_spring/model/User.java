@@ -2,10 +2,7 @@ package com.wilff.gains_spring.model;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -74,6 +71,11 @@ public class User implements UserDetails{
     @Builder.Default
     @JsonManagedReference
     private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
+    @JsonManagedReference
+    private Set<Split> splits = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -35,4 +35,8 @@ public class Exercise {
     @Builder.Default
     @JsonManagedReference
     private Set<WorkoutExercise> workoutExercises = new HashSet<>();
+
+    @ManyToMany(mappedBy = "exercises")
+    private Set<TrainingDay> trainingDays = new HashSet<>();
+
 }

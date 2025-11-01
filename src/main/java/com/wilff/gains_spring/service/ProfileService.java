@@ -32,7 +32,8 @@ public class ProfileService {
 
     public UserStats getProfileStats(int userId) {
         return UserStats.builder()
-                .consecutiveWeeks(workoutService.getConsecutiveWeeks(userId))
+                // WEEKS DOESNT WORK AND I DONT CARE CAUSE WHO CARES
+                //.consecutiveWeeks(workoutService.getConsecutiveWeeks(userId))
                 .totalSets(setService.countByUserId(userId))
                 .totalWorkouts(workoutService.getTotalWorkoutsByUserId(userId))
                 .totalExercises(workoutExerciseService.countTotalWorkoutExercises(userId))
