@@ -53,7 +53,7 @@ CREATE TABLE `lifting_set` (
   `set_order` int NOT NULL,
   `weight` double NOT NULL,
   `workout_exercise_id` int NOT NULL,
-  `logged_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `logged_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `FK80xvb1dgaqt3vf1nhcbw7oroi` (`workout_exercise_id`),
   CONSTRAINT `FK80xvb1dgaqt3vf1nhcbw7oroi` FOREIGN KEY (`workout_exercise_id`) REFERENCES `workout_exercise` (`id`)

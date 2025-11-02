@@ -217,5 +217,8 @@ public class SplitServiceImpl implements ISplitService {
     }
 
 
+    public void deleteById(int splitId) {
+        splitRepository.deleteById(splitId);
+    }
 
 }

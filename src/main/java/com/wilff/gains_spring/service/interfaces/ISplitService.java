@@ -13,4 +13,5 @@ public interface ISplitService {
     List<SplitDTO> getSplitsByUserId(int userId);
     SplitDTO createSplit(CreateSplitRequest dto, User user);
     SplitDTO updateSplit(int splitId, CreateSplitRequest dto);
+    void deleteById(int splitId);
 }

@@ -38,10 +38,15 @@ public class SplitController {
     }
 
     @PutMapping("/{splitId}")
-    public ResponseEntity<SplitDTO> editSplit(@PathVariable int splitId, @RequestBody CreateSplitRequest weeklyExercises,
-                                                @AuthenticationPrincipal UserDetails userDetails) {
-        var user = userService.findByEmail(userDetails.getUsername()).orElseThrow();
+    public ResponseEntity<SplitDTO> editSplit(@PathVariable int splitId, @RequestBody CreateSplitRequest weeklyExercises) {
+
         var createdSplit = splitService.updateSplit(splitId, weeklyExercises);
         return new ResponseEntity<>(createdSplit, HttpStatus.OK);
+    }
+
+    @DeleteMapping("{splitId}")
+    public ResponseEntity<?> deleteSplit(@PathVariable int splitId) {
+        splitService.deleteById(splitId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

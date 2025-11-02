@@ -31,7 +31,7 @@ public class LiftingSet {
     private int setOrder;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     private Instant loggedAt;
 
     @ManyToOne
