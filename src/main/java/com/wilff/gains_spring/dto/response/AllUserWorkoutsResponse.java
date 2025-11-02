@@ -20,6 +20,7 @@ public class AllUserWorkoutsResponse {
     private int id;
     private int userId;
     private String name;
+    private String note;
     private LocalDateTime date;
     private int exerciseCount;
     private int setCount;

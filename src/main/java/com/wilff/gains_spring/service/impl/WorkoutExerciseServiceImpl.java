@@ -2,6 +2,8 @@ package com.wilff.gains_spring.service.impl;
 
 import java.util.List;
 
+import com.wilff.gains_spring.service.interfaces.IWorkoutExerciseService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.wilff.gains_spring.dto.response.UserExerciseOverallStats;
@@ -11,14 +13,12 @@ import com.wilff.gains_spring.model.WorkoutExercise;
 import com.wilff.gains_spring.repository.ExerciseRepository;
 import com.wilff.gains_spring.repository.WorkoutExerciseRepository;
 import com.wilff.gains_spring.repository.WorkoutRepository;
-import com.wilff.gains_spring.service.interfaces.workout_exercise.WorkoutExerciseCommandService;
-import com.wilff.gains_spring.service.interfaces.workout_exercise.WorkoutExerciseQueryService;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class WorkoutExerciseServiceImpl implements WorkoutExerciseCommandService, WorkoutExerciseQueryService {
+public class WorkoutExerciseServiceImpl implements IWorkoutExerciseService {
 
     private final WorkoutExerciseRepository workoutExerciseRepository;
     private final WorkoutRepository workoutRepository;
@@ -30,13 +30,14 @@ public class WorkoutExerciseServiceImpl implements WorkoutExerciseCommandService
     }
 
     @Override
-    public WorkoutExercise create(int workoutId, int exerciseId) {
+    public WorkoutExercise create(int workoutId, int exerciseId, int order) {
         Exercise exercise = exerciseRepository.getReferenceById(exerciseId);
         Workout workout = workoutRepository.getReferenceById(workoutId);
 
         WorkoutExercise workoutExercise = WorkoutExercise.builder()
             .exercise(exercise)
             .workout(workout)
+            .exerciseOrder(order)
             .build();
         return workoutExerciseRepository.save(workoutExercise);
     }
@@ -52,9 +53,23 @@ public class WorkoutExerciseServiceImpl implements WorkoutExerciseCommandService
     }
 
     @Override
+    @Transactional
     public void delete(int workoutExerciseId) {
+        WorkoutExercise workoutExercise = workoutExerciseRepository.findById(workoutExerciseId).orElseThrow();
+
+        int workoutId = workoutExercise.getWorkout().getId();
+
         workoutExerciseRepository.deleteById(workoutExerciseId);
+
+        List<WorkoutExercise> remaining = workoutExerciseRepository.findByWorkoutIdOrderByExerciseOrder(workoutId);
+
+        for (int i = 0; i < remaining.size(); i++) {
+            remaining.get(i).setExerciseOrder(i + 1);
+        }
+
+        workoutExerciseRepository.saveAll(remaining);
     }
+
 
     @Override
     public List<UserExerciseOverallStats> getWorkoutExerciseStats(int userId) {
@@ -65,5 +80,11 @@ public class WorkoutExerciseServiceImpl implements WorkoutExerciseCommandService
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getById'");
     }
+
+    @Override
+    public int countTotalWorkoutExercises(int userId) {
+        return workoutExerciseRepository.countDistinctByWorkout_UserId(userId);
+    }
+
     
 }

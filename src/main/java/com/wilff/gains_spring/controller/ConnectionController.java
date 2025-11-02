@@ -2,6 +2,7 @@ package com.wilff.gains_spring.controller;
 
 import java.util.List;
 
+import com.wilff.gains_spring.service.interfaces.IUserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class ConnectionController {
 
     private final UserConnectionService connectionService;
-    private final UserServiceImpl userService;
+    private final IUserService userService;
 
     @PostMapping("/request/{receiverEmail}")
     public ResponseEntity<UserConnection> sendRequest(

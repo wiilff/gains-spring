@@ -3,6 +3,7 @@ package com.wilff.gains_spring.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.wilff.gains_spring.model.enums.MuscleGroup;
 
@@ -15,7 +16,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -35,4 +35,9 @@ public class Exercise {
     @Builder.Default
     @JsonManagedReference
     private Set<WorkoutExercise> workoutExercises = new HashSet<>();
+
+    @ManyToMany(mappedBy = "exercises")
+    @JsonIgnore
+    private Set<TrainingDay> trainingDays = new HashSet<>();
+
 }

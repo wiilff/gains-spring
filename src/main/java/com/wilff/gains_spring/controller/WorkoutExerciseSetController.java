@@ -2,18 +2,15 @@ package com.wilff.gains_spring.controller;
 
 import java.util.List;
 
+import com.wilff.gains_spring.service.interfaces.IUserService;
+import com.wilff.gains_spring.service.interfaces.IWorkoutExerciseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.wilff.gains_spring.dto.request.PostExerciseToWorkout;
 import com.wilff.gains_spring.dto.response.ExerciseStats;
@@ -32,8 +29,8 @@ import lombok.RequiredArgsConstructor;
 public class WorkoutExerciseSetController {
 
     private final WorkoutDetailService workoutDetailService; 
-    private final UserServiceImpl userService;
-    private final WorkoutExerciseServiceImpl workoutExerciseService;
+    private final IUserService userService;
+    private final IWorkoutExerciseService workoutExerciseService;
 
     @GetMapping("/sets/{workoutId}")
     public ResponseEntity<WorkoutExerciseSetResponse> getWorkoutDetails(@PathVariable int workoutId) {
@@ -58,9 +55,18 @@ public class WorkoutExerciseSetController {
     @PostMapping("")
     public ResponseEntity<?> setExerciseToWorkout(@RequestBody PostExerciseToWorkout request) {;
 
-        var newWorkoutExercise = workoutExerciseService.create(request.getWorkout_id(), request.getExercise_id());
+        var newWorkoutExercise = workoutExerciseService.create(request.getWorkout_id(), request.getExercise_id(), request.getOrder());
 
         return new ResponseEntity<>(newWorkoutExercise, HttpStatus.OK);
+    }
+
+    @PostMapping("/{workoutId}")
+    public ResponseEntity<?> setBulkExercisesToWorkout(@PathVariable int workoutId,
+                                                       @RequestBody List<Integer> exerciseIds) {
+        for(int i = 0; i< exerciseIds.size(); i++ ) {
+            workoutExerciseService.create(workoutId, exerciseIds.get(i), i + 1);
+        }
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{workoutExerciseId}")

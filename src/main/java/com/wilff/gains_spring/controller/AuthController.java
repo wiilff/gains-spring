@@ -1,17 +1,16 @@
 package com.wilff.gains_spring.controller;
 
+import com.wilff.gains_spring.service.interfaces.IUserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.wilff.gains_spring.config.JwtService;
 import com.wilff.gains_spring.dto.auth.AuthRequest;
@@ -26,6 +25,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import java.time.Instant;
+
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-    private final UserServiceImpl userService;
+    private final IUserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterUserRequest request, HttpServletResponse response) {
@@ -45,7 +46,7 @@ public class AuthController {
                 .userRole(UserRole.USER)
                 .build();
 
-        userService.create(user);
+        userService.save(user);
 
         String jwt = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
@@ -73,6 +74,14 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         User user = userService.findByEmail(request.getEmail()).orElseThrow();
+
+        if(user.isDeleted()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+        user.setLastLogin(Instant.now());
+        userService.save(user);
+
         String jwt = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
@@ -139,5 +148,61 @@ public class AuthController {
         response.addHeader(HttpHeaders.SET_COOKIE, deleteCookie.toString());
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("")
+    public ResponseEntity<AuthResponse> updateUser(@AuthenticationPrincipal UserDetails userDetails, @RequestBody RegisterUserRequest request, HttpServletResponse response) {
+        var user = userService.findByEmail(userDetails.getUsername()).orElseThrow();
+
+        if(request.getEmail() != null && !request.getEmail().isEmpty()) {
+            user.setEmail(request.getEmail());
+        }
+
+        if(request.getPassword() != null && !request.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+
+        if(request.getName() != null && !request.getName().isEmpty()) {
+            user.setName(request.getName());
+        }
+
+        userService.save(user);
+
+        String jwt = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true)
+                .secure(false)
+                .path("/api/auth/refresh")
+                .maxAge(7 * 24 * 60 * 60)
+                .sameSite("Strict")
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+
+        return ResponseEntity.ok(AuthResponse.builder()
+                .email(user.getEmail())
+                .token(jwt)
+                .build());
+
+    }
+
+    @DeleteMapping("")
+    public ResponseEntity<String> deleteUser(@AuthenticationPrincipal UserDetails userDetails, HttpServletResponse response) {
+        var user = userService.findByEmail(userDetails.getUsername()).orElseThrow();
+        user.setDeleted(true);
+        user.setDeletedAt(Instant.now());
+        userService.save(user);
+
+        ResponseCookie deleteCookie = ResponseCookie.from("refreshToken", "")
+                .httpOnly(true)
+                .secure(false)
+                .path("/api/auth/refresh")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, deleteCookie.toString());
+
+        return new ResponseEntity<>("Deleted", HttpStatus.OK);
     }
 }

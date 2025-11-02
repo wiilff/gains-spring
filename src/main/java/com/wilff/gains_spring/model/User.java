@@ -1,11 +1,11 @@
 package com.wilff.gains_spring.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,6 +39,19 @@ public class User implements UserDetails{
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private Instant createdAt;
+
+    @CreationTimestamp
+    private Instant lastLogin;
+
+    private boolean isPublic;
+
+    private boolean isDeleted;
+
+    private Instant deletedAt;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Builder.Default
     @JsonManagedReference
@@ -58,6 +71,11 @@ public class User implements UserDetails{
     @Builder.Default
     @JsonManagedReference
     private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
+    @JsonManagedReference
+    private Set<Split> splits = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

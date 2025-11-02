@@ -13,6 +13,5 @@ public class PostSetRequest {
     private Integer order;
     private Double reps;
     private Double weight;
-    private LocalDateTime loggedAt;
 
 }

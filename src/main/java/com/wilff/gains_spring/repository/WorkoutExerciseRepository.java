@@ -32,4 +32,9 @@ public interface WorkoutExerciseRepository extends JpaRepository<WorkoutExercise
     List<WorkoutExercise> findByWorkoutUserIdAndExerciseId(int userId, int exerciseId);
     List<WorkoutExercise> findByWorkoutUserId(int userId);
 
+    List<WorkoutExercise> findByWorkoutIdOrderByExerciseOrder(int workoutId);
+
+
+    @Query("SELECT COUNT(DISTINCT we.exercise.id) FROM WorkoutExercise we WHERE we.workout.user.id = :userId")
+    int countDistinctByWorkout_UserId(@Param("userId") int userId);
 }

@@ -3,21 +3,20 @@ package com.wilff.gains_spring.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wilff.gains_spring.service.interfaces.IExerciseService;
 import org.springframework.stereotype.Service;
 
 import com.wilff.gains_spring.dto.response.ExerciseResponse;
-import com.wilff.gains_spring.dto.response.ExerciseStats;
 import com.wilff.gains_spring.model.Exercise;
 import com.wilff.gains_spring.repository.ExerciseRepository;
-import com.wilff.gains_spring.service.interfaces.exercise.ExerciseCommandService;
-import com.wilff.gains_spring.service.interfaces.exercise.ExerciseQueryService;
+
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ExerciseService implements ExerciseQueryService, ExerciseCommandService {
+public class ExerciseService implements IExerciseService {
 
     private final ExerciseRepository exerciseRepository;
 

@@ -28,6 +28,7 @@ public class WorkoutDetailService {
         var exercises = workoutExerciseService.getAllByWorkout(workout).stream()
                 .map(ex -> WorkoutExerciseResponse.builder()
                         .workoutExerciseId(ex.getId())
+                        .order(ex.getExerciseOrder())
                         .exerciseId(ex.getExercise().getId())
                         .name(ex.getExercise().getName())
                         .sets(setService.getByWorkoutExercise(ex).stream()
