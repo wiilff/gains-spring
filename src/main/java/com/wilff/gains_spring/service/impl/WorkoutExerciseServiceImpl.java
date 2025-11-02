@@ -3,6 +3,7 @@ package com.wilff.gains_spring.service.impl;
 import java.util.List;
 
 import com.wilff.gains_spring.service.interfaces.IWorkoutExerciseService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.wilff.gains_spring.dto.response.UserExerciseOverallStats;
@@ -29,13 +30,14 @@ public class WorkoutExerciseServiceImpl implements IWorkoutExerciseService {
     }
 
     @Override
-    public WorkoutExercise create(int workoutId, int exerciseId) {
+    public WorkoutExercise create(int workoutId, int exerciseId, int order) {
         Exercise exercise = exerciseRepository.getReferenceById(exerciseId);
         Workout workout = workoutRepository.getReferenceById(workoutId);
 
         WorkoutExercise workoutExercise = WorkoutExercise.builder()
             .exercise(exercise)
             .workout(workout)
+            .exerciseOrder(order)
             .build();
         return workoutExerciseRepository.save(workoutExercise);
     }
@@ -51,9 +53,23 @@ public class WorkoutExerciseServiceImpl implements IWorkoutExerciseService {
     }
 
     @Override
+    @Transactional
     public void delete(int workoutExerciseId) {
+        WorkoutExercise workoutExercise = workoutExerciseRepository.findById(workoutExerciseId).orElseThrow();
+
+        int workoutId = workoutExercise.getWorkout().getId();
+
         workoutExerciseRepository.deleteById(workoutExerciseId);
+
+        List<WorkoutExercise> remaining = workoutExerciseRepository.findByWorkoutIdOrderByExerciseOrder(workoutId);
+
+        for (int i = 0; i < remaining.size(); i++) {
+            remaining.get(i).setExerciseOrder(i + 1);
+        }
+
+        workoutExerciseRepository.saveAll(remaining);
     }
+
 
     @Override
     public List<UserExerciseOverallStats> getWorkoutExerciseStats(int userId) {

@@ -33,18 +33,18 @@ VALUES
 -- ========================
 -- Workout Exercises (with explicit IDs)
 -- ========================
-INSERT INTO `workout_exercise` (`id`, `workout_id`, `exercise_id`)
+INSERT INTO `workout_exercise` (`id`, `workout_id`, `exercise_id`, `exercise_order`)
 VALUES
-    (1,1,1),  -- Chest Day: Bench Press
-    (2,1,3),  -- Chest Day: Bicep Curl
-    (3,2,2),  -- Leg Day: Squat
-    (4,3,1),  -- Full Body Blast: Bench Press
-    (5,3,2),  -- Full Body Blast: Squat
-    (6,3,4),  -- Full Body Blast: Deadlift
-    (7,3,5),  -- Full Body Blast: Shoulder Press
-    (8,3,7),  -- Full Body Blast: Plank
-    (9,4,3),  -- Arm Focus: Bicep Curl
-    (10,4,6); -- Arm Focus: Tricep Pushdown
+    (1,1,1,1),  -- Chest Day: Bench Press
+    (2,1,3,2),  -- Chest Day: Bicep Curl
+    (3,2,2,1),  -- Leg Day: Squat
+    (4,3,1,1),  -- Full Body Blast: Bench Press
+    (5,3,2,2),  -- Full Body Blast: Squat
+    (6,3,4,3),  -- Full Body Blast: Deadlift
+    (7,3,5,4),  -- Full Body Blast: Shoulder Press
+    (8,3,7,5),  -- Full Body Blast: Plank
+    (9,4,3,1),  -- Arm Focus: Bicep Curl
+    (10,4,6,2); -- Arm Focus: Tricep Pushdown
 
 -- ========================
 -- Lifting Sets
@@ -92,16 +92,16 @@ VALUES
 -- ========================
 -- Training Days
 -- ========================
-INSERT INTO `training_day` (`name`, `split_id`)
+INSERT INTO `training_day` (`split_id`, `day_of_week`)
 VALUES
-    ('Day 1 - Full Body', 1),
-    ('Day 2 - Full Body', 1),
-    ('Day 3 - Full Body', 1),
-    ('Upper Body', 2),
-    ('Lower Body', 2),
-    ('Push', 3),
-    ('Pull', 3),
-    ('Legs', 3);
+    (1, 'MONDAY'),
+    (1, 'WEDNESDAY'),
+    (1, 'SATURDAY'),
+    (2, 'TUESDAY'),
+    (2, 'FRIDAY'),
+    (3, 'THURSDAY'),
+    (3, 'SUNDAY'),
+    (3, 'MONDAY');
 
 -- ========================
 -- Training Day Exercises (many-to-many)

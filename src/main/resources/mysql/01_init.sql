@@ -137,6 +137,7 @@ DROP TABLE IF EXISTS `workout_exercise`;
 CREATE TABLE `workout_exercise` (
   `exercise_id` int NOT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
+  `exercise_order` int NOT NULL,
   `workout_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FKalytxvdcpsg2e2oo8ihk55dm2` (`exercise_id`),
@@ -202,7 +203,7 @@ CREATE TABLE `split` (
 DROP TABLE IF EXISTS `training_day`;
 CREATE TABLE `training_day` (
                                 `id` INT AUTO_INCREMENT PRIMARY KEY,
-                                `name` VARCHAR(255) NOT NULL,
+                                `day_of_week` enum('MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY') NOT NULL,
                                 `split_id` INT NOT NULL,
                                 FOREIGN KEY (`split_id`) REFERENCES `split`(`id`) ON DELETE CASCADE
 );

@@ -11,7 +11,7 @@ public interface IWorkoutExerciseService {
     List<UserExerciseOverallStats> getWorkoutExerciseStats(int userId);
     List<WorkoutExercise> findByWorkoutUserIdAndExerciseId(int userId, int exerciseId);
     List<WorkoutExercise> findByWorkoutUserId(int userId);
-    WorkoutExercise create(int workoutId, int exerciseId);
+    WorkoutExercise create(int workoutId, int exerciseId, int order);
     void delete(int workoutExerciseId);
 
     int countTotalWorkoutExercises(int userId);

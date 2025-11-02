@@ -9,4 +9,5 @@ public class PostExerciseToWorkout {
     
     private int exercise_id;
     private int workout_id;
+    private int order;
 }
