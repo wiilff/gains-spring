@@ -26,6 +26,7 @@ public interface WorkoutExerciseRepository extends JpaRepository<WorkoutExercise
                 LEFT JOIN we.sets s
                 WHERE w.user.id = :userId
                 GROUP BY e.id, e.name
+                ORDER BY COUNT(s.id) DESC
             """)
     List<UserExerciseOverallStats> getWorkoutExerciseStats(@Param("userId") int userId);
 

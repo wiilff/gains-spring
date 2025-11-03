@@ -70,7 +70,7 @@ public class WorkoutDetailService {
                                         .sorted(Comparator.comparing(SetResponse::getOrder))
                                         .toList())
                         .build())
-                .sorted(Comparator.comparing(ExerciseStats::getDate))
+                .sorted(Comparator.comparing(ExerciseStats::getDate).reversed())
                 .toList();
     }
 
