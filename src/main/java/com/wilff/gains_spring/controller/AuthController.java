@@ -56,7 +56,7 @@ public class AuthController {
                 .secure(false)
                 .path("/api/auth/refresh")
                 .maxAge(7 * 24 * 60 * 60)
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
@@ -90,7 +90,7 @@ public class AuthController {
                 .secure(false)
                 .path("/api/auth/refresh")
                 .maxAge(7 * 24 * 60 * 60)
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
@@ -125,7 +125,7 @@ public class AuthController {
                 .secure(false)
                 .path("/api/auth/refresh")
                 .maxAge(7 * 24 * 60 * 60)
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
@@ -143,7 +143,7 @@ public class AuthController {
                 .secure(false)
                 .path("/api/auth/refresh")
                 .maxAge(0)
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, deleteCookie.toString());
 
@@ -176,7 +176,7 @@ public class AuthController {
                 .secure(false)
                 .path("/api/auth/refresh")
                 .maxAge(7 * 24 * 60 * 60)
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
@@ -199,7 +199,7 @@ public class AuthController {
                 .secure(false)
                 .path("/api/auth/refresh")
                 .maxAge(0)
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, deleteCookie.toString());
 
